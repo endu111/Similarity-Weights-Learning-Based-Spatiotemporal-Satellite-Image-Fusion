@@ -190,7 +190,7 @@ def fuse(imglist,dimglist,window,method=1):
         #### b,h*w
         mstdx=dimgx.mean(2)
         mstdy=dimgy.mean(2)
-        ####norm b,h*w
+        ####norm 1,h*w
         wx=(1/(abs( mstdx )+0.0001))/(1/(abs( mstdx)+0.0001)+1/(abs(mstdy )+0.0001))
         wy=(1/(abs( mstdy )+0.0001))/(1/(abs( mstdx)+0.0001)+1/(abs(mstdy )+0.0001))  
         
@@ -212,12 +212,12 @@ def fuse(imglist,dimglist,window,method=1):
         #### b,h*w
         stdx=dimgx.std(2)
         stdy=dimgy.std(2)
-        ####norm b,h*w
+        ####norm 1,h*w
         wx=(1/ stdx )/(1/ stdx+1/stdy)
         wy=(1/stdy )/(1/stdx+1/stdy )         
 
 
-    ####fusion 1,b,h*w
+    ####fusion (1,1,h*w)X(1,b,h*w)=(1,b,h*w)
     fake=wx*imgx+wy*imgy
     fake=nn.functional.fold(fake,outshape,(1,1))
     return fake
